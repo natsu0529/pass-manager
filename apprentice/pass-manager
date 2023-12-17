@@ -1,0 +1,53 @@
+#!/bin/zsh
+
+function add_password {
+    echo "サービス名を入力してください："
+    read service_name
+
+    echo "ユーザー名を入力してください："
+    read username
+
+    echo "パスワードを入力してください："
+    read -s password
+
+    echo -e "\nパスワードの追加は成功しました。"
+    echo "$service_name:$username:$password" >> password_manager.txt
+}
+
+function get_password {
+    echo "サービス名を入力してください："
+    read service_name
+
+    # サービス名が保存されているか確認
+    grep "^$service_name:" password_manager.txt > /dev/null
+
+    if [ $? -eq 0 ]; then
+        echo "サービス名：$service_name"
+        grep "^$service_name:" password_manager.txt | cut -d ":" -f 2,3
+    else
+        echo "そのサービスは登録されていません。"
+    fi
+}
+
+while true; do
+    echo -e "\nパスワードマネージャーへようこそ！"
+    echo "次の選択肢から入力してください(Add Password/Get Password/Exit)："
+    read choice
+
+    case $choice in
+        "Add Password")
+            add_password
+            ;;
+        "Get Password")
+            get_password
+            ;;
+        "Exit")
+            echo "Thank you!"
+            exit 0
+            ;;
+        *)
+            echo "入力が間違えています。Add Password/Get Password/Exit から入力してください。"
+            ;;
+    esac
+done
+
