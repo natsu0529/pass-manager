@@ -18,7 +18,6 @@ function get_password {
     echo "サービス名を入力してください："
     read service_name
 
-    # サービス名が保存されているか確認
     grep "^$service_name:" password_manager.txt > /dev/null
 
     if [ $? -eq 0 ]; then
